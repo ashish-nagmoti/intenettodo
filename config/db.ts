@@ -1,4 +1,5 @@
 import { DatabaseOptions, configNamespace } from '@intentjs/core';
+import { knexSnakeCaseMappers } from 'objection';
 
 export default configNamespace(
   'db',
@@ -8,16 +9,16 @@ export default configNamespace(
     connections: {
       sqlite: {
         client: 'sqlite3',
-        connection: {
-          filename: process.env.DB_FILENAME || './dev.sqlite3',
-        },
         useNullAsDefault: true,
+        debug: !!+process.env.DB_DEBUG,
+        connection: {
+          filename: process.env.DB_FILENAME,
+        },
         migrations: {
           directory: './database/migrations',
         },
+        ...knexSnakeCaseMappers(),
       },
     },
   }),
 );
-
-
